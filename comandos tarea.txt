@@ -1,0 +1,31 @@
+Imagen insegura
+docker build -f Dockerfile.inseguro -t app-insegura .
+
+Imagen segura
+docker build -f Dockerfile.seguro -t app-segura .
+
+Correr imagen insegura
+docker run -d --name insegura -p 3000:3000 app-insegura
+
+Revisar usuario inseguro
+docker exec insegura whoami
+
+Detener imagen insegura
+docker stop insegura
+docker rm insegura
+
+Correr imagen segura
+docker run -d --name segura -p 3000:3000 -e DB_PASSWORD=PasswordSeguroDesdeFuera -e API_KEY=sk_segura_desde_fuera app-segura
+
+Revisar usuario seguro
+docker exec segura whoami
+
+Detener imagen segura
+docker stop segura
+docker rm segura
+
+Puerto inseguro
+http://localhost:3000
+
+Puerto seguro
+http://localhost:3000

@@ -1,0 +1,28 @@
+
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --omit=dev
+
+
+FROM node:18-alpine
+
+
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S -u 1001 -G nodejs nodejs
+
+WORKDIR /app
+
+
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --chown=nodejs:nodejs app.js package.json ./
+
+
+USER nodejs
+
+
+ENV NODE_ENV=production
+
+EXPOSE 3000
+CMD ["node", "app.js"]
